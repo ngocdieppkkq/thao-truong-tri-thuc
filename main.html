@@ -177,7 +177,7 @@
     </script>
 
     <script>
-        // NGÂN HÀNG 180 CÂU HỎI THEO BỘ TÀI LIỆU CỦA ĐỒNG CHÍ
+
         const quizBank = [
             // BỘ 1 (1-30)
             { id: 1, q: "Theo Đại hội XIV, chúng ta đã trải qua bao nhiêu năm thực hiện công cuộc đổi mới đất nước?", a: "C", opts: { A: "30 năm", B: "35 năm", C: "40 năm", D: "45 năm" } },
@@ -426,7 +426,7 @@
                     currentIndex++;
                     loadQuestion();
                 } else {
-                    showResult(); // Hết 5 câu thì gọi hàm hiện điểm
+                    showResult(); // Hết 10 câu thì gọi hàm hiện điểm
                 }
             }, 2000);
         }
