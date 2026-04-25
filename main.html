@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thao Trường Tri Thức: Hỏi đúng - đáp nhanh Nghị quyết Đại hội XIV</title>
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden; 
+        }
+
+        .header-image {
+            width: 100%;
+            max-width: 50%; 
+            height: auto;
+            display: block;
+            margin: 0 auto 10px auto;
+            border-radius: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .gift-box {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 5px solid var(--primary-color);
+        }
+
+        .gift-box:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .gift-box img { width: 60px; margin-bottom: 10px; }
+        .gift-box h3 { margin: 0; color: #2c3e50; font-size: 15px; text-transform: uppercase; }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .popup {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            animation: scaleUp 0.3s ease-out;
+        }
+
+        @keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .question-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 18px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            background: #f8f9fa;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            text-align: left;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .option-btn:hover { background: #e9ecef; border-color: #adb5bd; }
+        .option-btn.correct { background: var(--success-color) !important; color: white; border-color: #27ae60; }
+        .option-btn.wrong { background: var(--danger-color) !important; color: white; border-color: #c0392b; }
+
+        #feedback {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            height: 30px;
+        }
+
+        .btn-exit {
+            margin-top: 25px;
+            padding: 10px 30px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) { .grid-container { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+
+    <img src="header.png" alt="HEADER" class="header-image" onerror="this.style.display='none'">
+    <p style="color: #576574; font-weight: bold;">MỜI ĐỒNG CHÍ CHỌN BỘ CÂU HỎI:</p>
+    
+    <div class="grid-container">
+        <div class="gift-box" onclick="startQuiz(1, 30, 'THÔNG TIN ĐẠI HỘI & TẦM NHÌN CHIẾN LƯỢC')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>THÔNG TIN ĐẠI HỘI & TẦM NHÌN CHIẾN LƯỢC</h3>
+        </div>
+        <div class="gift-box" onclick="startQuiz(31, 60, 'QUỐC PHÒNG AN NINH & ĐỐI NGOẠI')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>QUỐC PHÒNG AN NINH & ĐỐI NGOẠI</h3>
+        </div>
+        <div class="gift-box" onclick="startQuiz(61, 90, 'PHÁT HUY SỨC MẠNH NHÂN DÂN & ĐẠI ĐOÀN KẾT')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>PHÁT HUY SỨC MẠNH NHÂN DÂN & ĐẠI ĐOÀN KẾT </h3>
+        </div>
+        <div class="gift-box" onclick="startQuiz(91, 120, 'ĐỘT PHÁ CHIẾN LƯỢC, KINH TẾ & MÔI TRƯỜNG')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>ĐỘT PHÁ CHIẾN LƯỢC, KINH TẾ & MÔI TRƯỜNG</h3>
+        </div>
+        <div class="gift-box" onclick="startQuiz(121, 150, 'XÂY DỰNG ĐẢNG VÀ HỆ THỐNG CHÍNH TRỊ')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>XÂY DỰNG ĐẢNG VÀ HỆ THỐNG CHÍNH TRỊ</h3>
+        </div>
+        <div class="gift-box" onclick="startQuiz(151, 180, 'CÁC CHỈ TIÊU & MỤC TIÊU CỤ THỂ KHÁC')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5726/5726678.png">
+            <h3>CÁC CHỈ TIÊU & MỤC TIÊU CỤ THỂ KHÁC</h3>
+        </div>
+    </div>
+
+    <div id="overlay-quiz" class="overlay">
+        <div class="popup">
+            <div id="quiz-info" style="display: flex; justify-content: space-between; color: var(--primary-color); font-weight: bold; margin-bottom: 10px;">
+                <span id="set-name-display"></span>
+                <span id="progress-display"></span>
+            </div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-list"></div>
+            <div id="feedback"></div>
+            <button class="btn-exit" onclick="closeQuiz()">THOÁT</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        }
+    </script>
+
+    <script>
+        // NGÂN HÀNG 180 CÂU HỎI THEO BỘ TÀI LIỆU CỦA ĐỒNG CHÍ
+        const quizBank = [
+            // BỘ 1 (1-30)
+            { id: 1, q: "Theo Đại hội XIV, chúng ta đã trải qua bao nhiêu năm thực hiện công cuộc đổi mới đất nước?", a: "C", opts: { A: "30 năm", B: "35 năm", C: "40 năm", D: "45 năm" } },
+            { id: 2, q: "Nghị quyết Đại hội XIV phấn đấu đến năm 2030, nước ta trở thành nước như thế nào?", a: "C", opts: { A: "Đang phát triển, thu nhập trung bình thấp", B: "Công nghiệp hóa, hiện đại hóa hoàn toàn", C: "Đang phát triển có công nghiệp hiện đại, thu nhập trung bình cao", D: "Nước phát triển, thu nhập cao" } },
+            { id: 3, q: "Tầm nhìn đến năm 2045, nước ta phấn đấu trở thành nước như thế nào?", a: "C", opts: { A: "Nước công nghiệp hiện đại", B: "Nước đang phát triển có thu nhập cao", C: "Nước phát triển, thu nhập cao", D: "Nước phát triển hàng đầu thế giới" } },
+            { id: 4, q: "Mục tiêu tốc độ tăng trưởng GDP bình quân giai đoạn 2026 - 2030 phấn đấu đạt mức nào?", a: "D", opts: { A: "Từ 7%/năm trở lên", B: "Từ 8%/năm trở lên", C: "Từ 9%/năm trở lên", D: "Từ 10%/năm trở lên" } },
+            { id: 5, q: "GDP bình quân đầu người đến năm 2030 phấn đấu đạt khoảng bao nhiêu?", a: "C", opts: { A: "6.500 USD", B: "7.500 USD", C: "8.500 USD", D: "9.500 USD" } },
+            { id: 6, q: "Nhân tố hàng đầu quyết định mọi thắng lợi của cách mạng Việt Nam là gì?", a: "A", opts: { A: "Sự lãnh đạo của Đảng, sức mạnh của Nhân dân và khối đại đoàn kết", B: "Sự viện trợ của quốc tế", C: "Tài nguyên thiên nhiên phong phú", D: "Vị trí địa lý thuận lợi" } },
+            { id: 7, q: "Tuổi thọ trung bình của người dân Việt Nam phấn đấu đến năm 2030 đạt khoảng bao nhiêu tuổi?", a: "C", opts: { A: "73,5 tuổi", B: "74,5 tuổi", C: "75,5 tuổi", D: "76,5 tuổi" } },
+            { id: 8, q: "Tỉ lệ che phủ rừng được phấn đấu duy trì ở mức bao nhiêu %?", a: "C", opts: { A: "40%", B: "41%", C: "42%", D: "43%" } },
+            { id: 9, q: "Giai đoạn phát triển mới của đất nước theo tinh thần Đại hội XIV được gọi là kỷ nguyên gì?", a: "B", opts: { A: "Kỷ nguyên công nghiệp hóa", B: "Kỷ nguyên vươn mình của dân tộc", C: "Kỷ nguyên số hóa", D: "Kỷ nguyên hội nhập" } },
+            { id: 10, q: "Trong quá trình phát triển, nhiệm vụ nào được xác định là 'Trung tâm'?", a: "C", opts: { A: "Xây dựng Đảng", B: "Phát triển văn hóa, con người", C: "Phát triển kinh tế, xã hội, bảo vệ môi trường", D: "Quốc phòng, an ninh" } },
+            { id: 11, q: "Đại hội đại biểu toàn quốc lần thứ XIV của Đảng diễn ra trong khoảng thời gian nào?", a: "B", opts: { A: "Từ 15/01/2026 đến 20/01/2026", B: "Từ 19/01/2026 đến 23/01/2026", C: "Từ 20/01/2026 đến 25/01/2026", D: "Từ 01/01/2026 đến 05/01/2026" } },
+            { id: 12, q: "Địa điểm tổ chức Đại hội đại biểu toàn quốc lần thứ XIV của Đảng ở đâu?", a: "A", opts: { A: "Thủ đô Hà Nội", B: "Thành phố Hồ Chí Minh", C: "Thành phố Đà Nẵng", D: "Thành phố Hải Phòng" } },
+            { id: 13, q: "Văn kiện nào được trình tại Đại hội XIV để thảo luận?", a: "C", opts: { A: "Văn kiện của Quốc hội khóa XV", B: "Văn kiện của Chính phủ nhiệm kỳ 2021-2026", C: "Các văn kiện do Ban Chấp hành Trung ương Đảng khoá XIII trình", D: "Dự thảo Hiến pháp sửa đổi" } },
+            { id: 14, q: "Đại hội XIV đã tổng kết bao nhiêu năm thi hành Điều lệ Đảng?", a: "B", opts: { A: "10 năm (2015 - 2025)", B: "15 năm (2011 - 2025)", C: "20 năm (2005 - 2025)", D: "40 năm (1986 - 2026)" } },
+            { id: 15, q: "Giai đoạn phát triển đất nước sau Đại hội XIV được xác định là kỷ nguyên gì?", a: "C", opts: { A: "Kỷ nguyên công nghiệp hóa", B: "Kỷ nguyên kinh tế số", C: "Kỷ nguyên vươn mình của dân tộc", D: "Kỷ nguyên hội nhập toàn cầu" } },
+            { id: 16, q: "Quan điểm chỉ đạo của Đảng xác định yếu tố nào là 'trung tâm'?", a: "B", opts: { A: "Xây dựng Đảng", B: "Phát triển kinh tế, xã hội, bảo vệ môi trường", C: "Phát triển văn hoá, con người", D: "Quốc phòng, an ninh" } },
+            { id: 17, q: "Quan điểm chỉ đạo của Đảng xác định yếu tố nào là 'then chốt'?", a: "A", opts: { A: "Xây dựng Đảng", B: "Phát triển kinh tế", C: "Phát triển văn hóa", D: "Đối ngoại" } },
+            { id: 18, q: "Quan điểm chỉ đạo của Đảng xác định yếu tố nào là 'nền tảng'?", a: "C", opts: { A: "Khoa học công nghệ", B: "Kinh tế nhà nước", C: "Phát triển văn hoá, con người", D: "Quốc phòng, an ninh" } },
+            { id: 19, q: "Quan điểm chỉ đạo của Đảng xác định yếu tố nào là 'trọng yếu, thường xuyên'?", a: "C", opts: { A: "Phát triển du lịch", B: "Bảo vệ môi trường", C: "Tăng cường quốc phòng, an ninh và đẩy mạnh đối ngoại, hội nhập quốc tế", D: "Chuyển đổi số" } },
+            { id: 20, q: "Kiên định đẩy mạnh toàn diện, đồng bộ công cuộc gì theo Quan điểm chỉ đạo (1)?", a: "B", opts: { A: "Công cuộc hiện đại hóa", B: "Công cuộc đổi mới", C: "Công cuộc số hóa", D: "Công cuộc hội nhập" } },
+            { id: 21, q: "Theo Nghị quyết XIV, chúng ta lấy yếu tố nào để 'thúc đẩy phát triển nhanh, bền vững'?", a: "A", opts: { A: "Ổn định", B: "Đột phá", C: "Cạnh tranh", D: "Viện trợ" } },
+            { id: 22, q: "Nghị quyết XIV xác định mô hình tăng trưởng mới lấy yếu tố nào làm động lực chính?", a: "C", opts: { A: "Vốn đầu tư nước ngoài (FDI)", B: "Tài nguyên thiên nhiên", C: "Khoa học, công nghệ, đổi mới sáng tạo, chuyển đổi số quốc gia", D: "Xuất khẩu nông sản" } },
+            { id: 23, q: "Thành phần kinh tế nào được xác định giữ vai trò 'chủ đạo' trong Quan điểm chỉ đạo (3)?", a: "C", opts: { A: "Kinh tế tư nhân", B: "Kinh tế tập thể", C: "Kinh tế nhà nước", D: "Kinh tế có vốn đầu tư nước ngoài" } },
+            { id: 24, q: "Thành phần kinh tế nào được xác định là 'một động lực quan trọng nhất' trong Quan điểm chỉ đạo (3)?", a: "B", opts: { A: "Kinh tế cá thể", B: "Kinh tế tư nhân", C: "Kinh tế hợp tác xã", D: "Kinh tế nhà nước" } },
+            { id: 25, q: "Nghị quyết XIV yêu cầu bảo đảm và bảo vệ cao nhất lợi ích quốc gia - dân tộc trên cơ sở nào?", a: "B", opts: { A: "Sức mạnh quân sự", B: "Các nguyên tắc cơ bản của luật pháp quốc tế và Hiến chương Liên hợp quốc", C: "Các hiệp ước thương mại", D: "Các quan hệ ngoại giao song phương" } },
+            { id: 26, q: "Tầm nhìn đến năm 2030, Việt Nam phấn đấu trở thành nước có thu nhập như thế nào?", a: "C", opts: { A: "Thu nhập thấp", B: "Thu nhập trung bình thấp", C: "Thu nhập trung bình cao", D: "Thu nhập cao" } },
+            { id: 27, q: "Hiện thực hoá tầm nhìn đến năm 2045, nước ta trở thành nước như thế nào?", a: "B", opts: { A: "Nước đang phát triển", B: "Nước phát triển, thu nhập cao", C: "Nước công nghiệp mới", D: "Nước dẫn đầu về công nghệ" } },
+            { id: 28, q: "Khát vọng phát triển đất nước gắn liền với việc vững bước đi lên con đường nào?", a: "B", opts: { A: "Tư bản chủ nghĩa", B: "Xã hội chủ nghĩa", C: "Quân chủ lập hiến", D: "Trung lập tuyệt đối" } },
+            { id: 29, q: "Mục tiêu tổng quát là xây dựng một nước Việt Nam hòa bình, độc lập, dân chủ và gì nữa?", a: "A", opts: { A: "Giàu mạnh, phồn vinh, văn minh, hạnh phúc", B: "Công bằng, hiện đại, văn minh", C: "Tự do, dân chủ, phát triển", D: "Toàn diện, hiện đại, vững chắc" } },
+            { id: 30, q: "Động lực mạnh mẽ cho sự phát triển theo Quan điểm (3) là phát huy sức mạnh của yếu tố nào?", a: "C", opts: { A: "Sức mạnh của máy móc", B: "Sức mạnh của ngoại tệ", C: "Sức mạnh văn hoá, con người", D: "Sức mạnh của thị trường chứng khoán" } },
+
+            // BỘ 2 (31-60)
+            { id: 31, q: "Mục tiêu xây dựng Quân đội nhân dân, Công an nhân dân theo Nghị quyết XIV là gì?", a: "C", opts: { A: "Chính quy, hiện đại", B: "Tinh nhuệ, từng bước hiện đại", C: "Cách mạng, chính quy, tinh nhuệ, hiện đại", D: "Ưu tiên hiện đại hóa một số quân binh chủng" } },
+            { id: 32, q: "Quan điểm bảo vệ Tổ quốc được nhấn mạnh trong Nghị quyết XIV là gì?", a: "B", opts: { A: "Tấn công để tự vệ", B: "Bảo vệ Tổ quốc từ sớm, từ xa", C: "Xây dựng lực lượng dự bị động viên hùng hậu", D: "Phòng thủ khi có chiến tranh xảy ra" } },
+            { id: 33, q: "Phương châm phòng thủ quốc gia được xác định là gì?", a: "B", opts: { A: "Phòng thủ bị động", B: "Tăng cường quốc phòng toàn dân, phòng thủ chủ động", C: "Dựa vào liên minh quân sự", D: "Chỉ tập trung phòng thủ biên giới" } },
+            { id: 34, q: "Đường lối đối ngoại nhất quán của Đảng ta được khẳng định tại Đại hội XIV là gì?", a: "A", opts: { A: "Độc lập, tự chủ, tự cường, hoà bình, hữu nghị, hợp tác và phát triển", B: "Đứng về một phe để bảo vệ đất nước", C: "Ưu tiên phát triển kinh tế hơn ngoại giao chính trị", D: "Thu mình lại để tự lực cánh sinh" } },
+            { id: 35, q: "Sức mạnh bảo vệ Tổ quốc là sự kết hợp giữa sức mạnh dân tộc với sức mạnh nào?", a: "C", opts: { A: "Sức mạnh quân sự", B: "Sức mạnh kinh tế", C: "Sức mạnh thời đại", D: "Sức mạnh khoa học công nghệ" } },
+            { id: 36, q: "Đâu là một trong những loại hình an ninh kiểu mới cần bảo vệ vững chắc?", a: "C", opts: { A: "An ninh lương thực", B: "An ninh biên giới", C: "An ninh dữ liệu, an ninh mạng", D: "An ninh hàng hải" } },
+            { id: 37, q: "Nhiệm vụ bảo vệ Tổ quốc gắn kết chặt chẽ nhất với nhiệm vụ nào?", a: "C", opts: { A: "Chỉ phát triển kinh tế", B: "Mở rộng diện tích đất nông nghiệp", C: "Phát triển kinh tế, văn hoá, xã hội, bảo vệ môi trường, đối ngoại", D: "Xây dựng các khu công nghiệp lớn" } },
+            { id: 38, q: "Về mặt biên giới, lãnh thổ, quan điểm của Đảng ta là kiên quyết, kiên trì bảo vệ vững chắc điều gì?", a: "B", opts: { A: "Lợi ích kinh tế trên biển", B: "Độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ", C: "Quyền khai thác tài nguyên", D: "Đường biên giới hòa bình" } },
+            { id: 39, q: "Mục tiêu cao nhất trong công tác quốc phòng, đối ngoại là bảo đảm và bảo vệ cái gì?", a: "B", opts: { A: "Các hiệp định thương mại", B: "Lợi ích quốc gia - dân tộc", C: "Quyền lợi của doanh nghiệp", D: "Quan hệ với các nước láng giềng" } },
+            { id: 40, q: "Việt Nam chủ trương tham gia với cộng đồng quốc tế trên tinh thần như thế nào?", a: "B", opts: { A: "Chỉ hợp tác kinh tế, không tham gia chính trị", B: "Là bạn, là đối tác tin cậy, thành viên tích cực, có trách nhiệm", C: "Luôn đứng trung lập tuyệt đối", D: "Chỉ tham gia khi có lợi ích kinh tế trực tiếp" } },
+            { id: 41, q: "Quan điểm bảo vệ Tổ quốc theo Nghị quyết XIV là gì?", a: "B", opts: { A: "Tấn công phủ đầu khi có nguy cơ", B: "Bảo vệ Tổ quốc từ sớm, từ xa", C: "Chỉ bảo vệ biên giới khi có chiến tranh", D: "Xây dựng rào chắn bao quanh lãnh thổ" } },
+            { id: 42, q: "Lực lượng nào được xác định xây dựng theo hướng cách mạng, chính quy, tinh nhuệ, hiện đại?", a: "B", opts: { A: "Lực lượng dân quân tự vệ", B: "Quân đội nhân dân và Công an nhân dân", C: "Đội ngũ kiểm lâm", D: "Lực lượng thanh niên xung phong" } },
+            { id: 43, q: "Nghị quyết XIV nhấn mạnh việc bảo vệ vững chắc yếu tố nào của Tổ quốc?", a: "B", opts: { A: "Chỉ bảo vệ các vùng kinh tế trọng điểm", B: "Độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ quốc gia", C: "Chỉ bảo vệ các thành phố lớn", D: "Chỉ bảo vệ hệ thống đường giao thông" } },
+            { id: 44, q: "Đâu là một loại hình an ninh mới cần bảo vệ được nhắc đến trong Nghị quyết?", a: "B", opts: { A: "An ninh chợ búa", B: "An ninh dữ liệu, an ninh mạng", C: "An ninh trường học nông thôn", D: "An ninh các khu vui chơi" } },
+            { id: 45, q: "Việc ngăn ngừa, đẩy lùi các nhân tố gây mất ổn định chính trị từ bên trong được gọi là gì?", a: "B", opts: { A: "Phòng thủ bị động", B: "Phòng thủ chủ động", C: "Tấn công đối nội", D: "Quản lý hành chính" } },
+            { id: 46, q: "Đường lối đối ngoại nhất quán của Việt Nam được khẳng định tại Đại hội XIV là?", a: "B", opts: { A: "Liên minh với một cường quốc duy nhất", B: "Độc lập, tự chủ, tự cường, hoà bình, hữu nghị, hợp tác và phát triển", C: "Đóng cửa để tự cung tự cấp", D: "Chỉ quan hệ với các nước có cùng chế độ" } },
+            { id: 47, q: "Phương châm đa phương hoá, đa dạng hoá trong đối ngoại có nghĩa là gì?", a: "A", opts: { A: "Việt Nam là bạn, đối tác tin cậy, thành viên có trách nhiệm của cộng đồng quốc tế", B: "Chỉ quan hệ với các tổ chức phi chính phủ", C: "Hạn chế tối đa các hiệp định quốc tế", D: "Chỉ tập trung vào đối ngoại Đảng" } },
+            { id: 48, q: "Hoạt động đối ngoại trong kỷ nguyên mới cần tương xứng với điều gì của đất nước?", a: "B", opts: { A: "Diện tích rừng", B: "Tầm vóc lịch sử, văn hoá và vị thế của đất nước", C: "Số lượng tàu biển", D: "Sản lượng xuất khẩu cà phê" } },
+            { id: 49, q: "Đối ngoại phải bảo vệ cao nhất yếu tố nào trên cơ sở luật pháp quốc tế?", a: "B", opts: { A: "Lợi ích của các nhà đầu tư nước ngoài", B: "Lợi ích quốc gia - dân tộc", C: "Quyền lợi của các tập đoàn tư nhân", D: "Lợi ích của các quốc gia láng giềng" } },
+            { id: 50, q: "Nghị quyết XIV yêu cầu phát triển đối ngoại theo hướng nào?", a: "B", opts: { A: "Chỉ tập trung vào ngoại giao văn hóa", B: "Đồng bộ, sáng tạo, sâu rộng, toàn diện, hiệu quả", C: "Chỉ thực hiện khi có yêu cầu từ Liên hợp quốc", D: "Thu hẹp quy mô để tiết kiệm ngân sách" } },
+            { id: 51, q: "Sức mạnh bảo vệ Tổ quốc là sự kết hợp giữa sức mạnh dân tộc với sức mạnh nào?", a: "B", opts: { A: "Sức mạnh của đồng tiền", B: "Sức mạnh thời đại", C: "Sức mạnh của trí tuệ nhân tạo", D: "Sức mạnh của các nước đồng minh" } },
+            { id: 52, q: "Quan điểm (4) yêu cầu gắn kết chặt chẽ hài hoà giữa phát triển kinh tế - xã hội với yếu tố nào?", a: "B", opts: { A: "Sự tăng trưởng dân số", B: "Củng cố quốc phòng, an ninh, nâng cao hiệu quả đối ngoại", C: "Xây dựng các tòa nhà chọc trời", D: "Phát triển các môn thể thao mạo hiểm" } },
+            { id: 53, q: "Nghị quyết XIV xác định giải quyết các vấn đề khu vực và quốc tế với tinh thần gì?", a: "B", opts: { A: "Đứng ngoài cuộc không can thiệp", B: "Tham gia chủ động, có trách nhiệm", C: "Chỉ tham gia khi có lợi ích kinh tế trực tiếp", D: "Luôn phản đối mọi sáng kiến quốc tế" } },
+            { id: 54, q: "Hệ thống đối ngoại Việt Nam bao gồm những thành phần nào?", a: "B", opts: { A: "Chỉ có Bộ Ngoại giao", B: "Đối ngoại đảng, ngoại giao nhà nước và đối ngoại nhân dân", C: "Chỉ có đối ngoại nhân dân", D: "Các đại sứ lưu động" } },
+            { id: 55, q: "Mục tiêu đối ngoại là 'Kiến tạo' môi trường như thế nào cho phát triển đất nước?", a: "B", opts: { A: "Môi trường cạnh tranh gay gắt", B: "Môi trường hoà bình, ổn định, hữu nghị, hợp tác, thuận lợi", C: "Môi trường ưu đãi cho doanh nghiệp nước ngoài", D: "Môi trường trung lập hoàn toàn" } },
+            { id: 56, q: "Việc giữ vững an ninh năng lượng, an ninh nguồn nước, an ninh lương thực được xếp vào nhóm nhiệm vụ nào?", a: "B", opts: { A: "Phát triển văn hóa", B: "Quốc phòng, an ninh", C: "Xây dựng Đảng", D: "Giáo dục đào tạo" } },
+            { id: 57, q: "Nghị quyết XIV yêu cầu giữ gìn và phát huy giá trị gì để nâng cao vị thế quốc tế?", a: "B", opts: { A: "Giá trị đồng tiền nội tệ", B: "Giá trị truyền thống văn hoá dân tộc", C: "Các chỉ số chứng khoán", D: "Các kỷ lục Guinness của Việt Nam" } },
+            { id: 58, q: "'Hợp tác bình đẳng, cùng có lợi' là nguyên tắc của hoạt động nào?", a: "B", opts: { A: "Hoạt động quản lý đô thị", B: "Hoạt động đối ngoại và hội nhập quốc tế", C: "Hoạt động khai thác khoáng sản", D: "Hoạt động từ thiện xã hội" } },
+            { id: 59, q: "Trong đối ngoại, Việt Nam đóng vai trò là 'Thành viên' như thế nào của cộng đồng quốc tế?", a: "B", opts: { A: "Thành viên chỉ quan sát", B: "Thành viên tích cực, có trách nhiệm", C: "Thành viên hưởng lợi thụ động", D: "Thành viên dự bị" } },
+            { id: 60, q: "Việc bảo vệ Tổ quốc 'từ sớm, từ xa' nhằm mục đích gì cao nhất?", a: "B", opts: { A: "Để phô trương sức mạnh quân sự", B: "Giữ vững môi trường hoà bình, ổn định để phát triển đất nước", C: "Để chiếm ưu thế trong các cuộc đàm phán thương mại", D: "Để gia tăng diện tích lãnh thổ" } },
+
+            // BỘ 3 (61-90)
+            { id: 61, q: "Quan điểm xuyên suốt của Đảng ta về vị trí của Nhân dân là gì?", a: "C", opts: { A: "Nhân dân là người thi hành chính sách", B: "Nhân dân là lực lượng lao động chính", C: "Quán triệt sâu sắc quan điểm 'Dân là gốc', Nhân dân là chủ thể, trung tâm", D: "Nhân dân là đối tượng được bảo vệ" } },
+            { id: 62, q: "Mọi chủ trương, chính sách của Đảng và Nhà nước phải thực sự xuất phát từ đâu?", a: "B", opts: { A: "Ý chí của người lãnh đạo", B: "Nhu cầu, nguyện vọng, quyền và lợi ích hợp pháp, chính đáng của Nhân dân", C: "Nhu cầu của nền kinh tế thế giới", D: "Các chuyên gia nước ngoài" } },
+            { id: 63, q: "Nền tảng tinh thần, sức mạnh nội sinh và động lực to lớn cho sự phát triển của đất nước là gì?", a: "B", opts: { A: "Nguồn tài nguyên thiên nhiên", B: "Phát triển nguồn lực con người, phát triển văn hoá", C: "Nguồn vốn FDI", D: "Lực lượng vũ trang" } },
+            { id: 64, q: "Thước đo và mục tiêu phấn đấu của Đảng, Nhà nước là gì?", a: "A", opts: { A: "Quyền con người, quyền công dân, hạnh phúc và sự hài lòng của Nhân dân", B: "Mức độ tăng trưởng GDP hàng năm", C: "Số lượng các đô thị được xây dựng", D: "Sức mạnh của Quân đội" } },
+            { id: 65, q: "Khối đại đoàn kết toàn dân tộc được xây dựng dựa trên cơ sở phát huy sức mạnh của ai?", a: "C", opts: { A: "Chỉ phát huy sức mạnh tầng lớp trí thức", B: "Chỉ phát huy sức mạnh giai cấp công nhân", C: "Sức mạnh, bản lĩnh, trí tuệ con người Việt Nam và thế trận lòng dân", D: "Sự ủng hộ của bạn bè quốc tế" } },
+            { id: 66, q: "Trong quản lý phát triển xã hội, các chính sách cần bảo đảm những yếu tố '4 An' nào cho người dân?", a: "C", opts: { A: "An ninh, an toàn, an cư, an lạc", B: "An sinh, an vui, an nhàn, an tâm", C: "An ninh, an sinh, an toàn, an dân", D: "An cư, an nghiệp, an khang, an bình" } },
+            { id: 67, q: "Trong nhiệm vụ phát triển, cái gì được xác định là 'nền tảng'?", a: "C", opts: { A: "Khoa học công nghệ", B: "Kinh tế tư nhân", C: "Phát triển văn hoá, con người", D: "Quốc phòng an ninh" } },
+            { id: 68, q: "Trong kỷ nguyên mới, truyền thống nào của dân tộc cần được khơi dậy mạnh mẽ?", a: "A", opts: { A: "Yêu nước, khát vọng phát triển, tinh thần đoàn kết, ý chí tự chủ, tự lực, tự cường", B: "Truyền thống nông nghiệp lúa nước", C: "Tinh thần hướng ngoại", D: "Tinh thần cạnh tranh thương mại" } },
+            { id: 69, q: "Chủ trương của Đảng đối với nền giáo dục quốc dân là xây dựng nền giáo dục như thế nào?", a: "C", opts: { A: "Nền giáo dục phổ cập cơ bản", B: "Nền giáo dục hoàn toàn miễn phí", C: "Hiện đại, ngang tầm khu vực và thế giới", D: "Tập trung vào dạy nghề thủ công" } },
+            { id: 70, q: "Việt Nam phấn đấu thuộc nhóm bao nhiêu quốc gia có chỉ số hạnh phúc cao nhất?", a: "C", opts: { A: "Nhóm 20", B: "Nhóm 30", C: "Nhóm 40", D: "Nhóm 50" } },
+            { id: 71, q: "Quan điểm 'Dân là gốc' được hiểu như thế nào trong Nghị quyết XIV?", a: "B", opts: { A: "Dân là người thực hiện mọi mệnh lệnh", B: "Nhân dân là chủ thể, là trung tâm của công cuộc đổi mới", C: "Dân là đối tượng cần được quản lý chặt chẽ", D: "Dân là nguồn cung cấp nhân lực thủ công" } },
+            { id: 72, q: "Thước đo và mục tiêu phấn đấu của Đảng, Nhà nước là gì (Quan điểm 10)?", a: "B", opts: { A: "Tổng giá trị xuất khẩu hằng năm", B: "Hạnh phúc và sự hài lòng của Nhân dân", C: "Số lượng các đô thị loại I", D: "Tổng số vốn đầu tư công đã giải ngân" } },
+            { id: 73, q: "Mọi chủ trương, chính sách của Đảng phải xuất phát từ đâu?", a: "B", opts: { A: "Ý chí chủ quan của người lãnh đạo", B: "Nhu cầu, nguyện vọng, quyền và lợi ích hợp pháp của Nhân dân", C: "Các mô hình sẵn có từ nước ngoài", D: "Các đề án của các chuyên gia kinh tế độc lập" } },
+            { id: 74, q: "Nghị quyết XIV nhấn mạnh việc bảo vệ quyền nào của con người?", a: "B", opts: { A: "Quyền tự do tuyệt đối không giới hạn", B: "Quyền con người, quyền công dân theo Hiến pháp và pháp luật", C: "Quyền sở hữu mọi tài nguyên quốc gia", D: "Quyền không cần thực hiện nghĩa vụ quân sự" } },
+            { id: 75, q: "Hệ giá trị nào được xác định là nền tảng xây dựng văn hóa Việt Nam tiên tiến?", a: "A", opts: { A: "Giá trị quốc gia, hệ giá trị văn hoá, gia đình và chuẩn mực con người Việt Nam", B: "Giá trị văn hóa phương Tây hiện đại", C: "Giá trị tiêu dùng và hưởng thụ", D: "Giá trị cổ hủ, lạc hậu" } },
+            { id: 76, q: "Mục tiêu phát triển con người Việt Nam toàn diện về yếu tố nào?", a: "B", opts: { A: "Chỉ cần thể lực tốt", B: "Đạo đức, trí tuệ, ý thức dân tộc, trách nhiệm công dân, kỹ năng số...", C: "Chỉ cần giỏi về kiếm tiền", D: "Chỉ cần thông thạo ngoại ngữ" } },
+            { id: 77, q: "Nghị quyết XIV xác định giáo dục và đào tạo ở vị trí nào?", a: "B", opts: { A: "Nhiệm vụ phụ trợ cho kinh tế", B: "Quốc sách hàng đầu, quyết định tương lai dân tộc", C: "Dịch vụ kinh doanh có lợi nhuận", D: "Chỉ dành cho tầng lớp tinh hoa" } },
+            { id: 78, q: "Phương hướng phát triển giáo dục theo Nghị quyết là gì?", a: "A", opts: { A: "Chuẩn hoá, hiện đại hoá, dân chủ hoá, xã hội hoá và hội nhập quốc tế", B: "Tập trung dạy nghề thủ công là chính", C: "Miễn phí hoàn toàn cho mọi cấp học ngay lập tức", D: "Chỉ dạy các môn khoa học tự nhiên" } },
+            { id: 79, q: "Đâu là nhiệm vụ trọng tâm để nâng cao chất lượng nguồn nhân lực?", a: "B", opts: { A: "Tăng số lượng sinh viên ngành văn học", B: "Đẩy mạnh xây dựng xã hội học tập, học tập suốt đời", C: "Giảm bớt thời gian học ở trường", D: "Chỉ tập trung vào đào tạo tại nước ngoài" } },
+            { id: 80, q: "Chính sách xã hội theo Nghị quyết XIV cần đạt tính chất nào?", a: "B", opts: { A: "Tạm thời và ngắn hạn", B: "Hiện đại, toàn diện, bao trùm, bền vững", C: "Chỉ áp dụng cho khu vực thành thị", D: "Chỉ dành cho đối tượng có công" } },
+            { id: 81, q: "Mục tiêu 'An dân' trong chính sách xã hội có nghĩa là gì?", a: "B", opts: { A: "Cung cấp lương thực miễn phí mỗi ngày", B: "Lòng dân yên ổn, tin tưởng vào chế độ, được an toàn", C: "Hạn chế người dân di cư", D: "Giao quyền tự trị cho các địa phương" } },
+            { id: 82, q: "Tỉ lệ lao động nông nghiệp trong tổng lao động xã hội đến năm 2030 giảm xuống mức nào?", a: "B", opts: { A: "Dưới 10%", B: "Dưới 20%", C: "Dưới 30%", D: "Dưới 50%" } },
+            { id: 83, q: "Tỉ lệ lao động qua đào tạo có bằng cấp, chứng chỉ mục tiêu năm 2030 đạt bao nhiêu?", a: "B", opts: { A: "20 - 25%", B: "35 - 40%", C: "50 - 60%", D: "Trên 80%" } },
+            { id: 84, q: "Chỉ số phát triển con người (HDI) phấn đấu đạt mức bao nhiêu vào năm 2030?", a: "B", opts: { A: "Khoảng 0,6", B: "Khoảng 0,8", C: "Khoảng 0,9", D: "1,0 (tuyệt đối)" } },
+            { id: 85, q: "Tuổi thọ trung bình của người dân Việt Nam phấn đấu đạt bao nhiêu tuổi vào năm 2030?", a: "B", opts: { A: "73 tuổi", B: "75,5 tuổi", C: "78 tuổi", D: "80 tuổi" } },
+            { id: 86, q: "Thời gian sống khoẻ mạnh của người dân phấn đấu đạt tối thiểu bao nhiêu năm?", a: "B", opts: { A: "60 năm", B: "68 năm", C: "70 năm", D: "75 năm" } },
+            { id: 87, q: "Việt Nam phấn đấu thuộc nhóm bao nhiêu quốc gia có chỉ số hạnh phúc cao nhất?", a: "B", opts: { A: "Nhóm 20", B: "Nhóm 40", C: "Nhóm 80", D: "Nhóm 100" } },
+            { id: 88, q: "Chuẩn nghèo đa chiều giai đoạn 2026 - 2030 duy trì mức giảm bao nhiêu mỗi năm?", a: "B", opts: { A: "0,5 điểm %/năm", B: "1 - 1,5 điểm %/năm", C: "2 - 3 điểm %/năm", D: "5 điểm %/năm" } },
+            { id: 89, q: "Nghị quyết XIV yêu cầu phát triển văn hoá như thế nào so với kinh tế và chính trị?", a: "B", opts: { A: "Văn hóa phải đi sau kinh tế", B: "Phát triển văn hoá ngang tầm với phát triển kinh tế và chính trị", C: "Văn hóa chỉ là yếu tố trang trí", D: "Chỉ tập trung phát triển kinh tế, văn hóa tự phát triển" } },
+            { id: 90, q: "Việc thắt chặt mối quan hệ gắn bó mật thiết giữa Đảng với ai là nhiệm vụ quan trọng?", a: "B", opts: { A: "Với các tổ chức quốc tế", B: "Với Nhân dân", C: "Với các nhà đầu tư nước ngoài", D: "Với các chuyên gia công nghệ" } },
+
+            // BỘ 4 (91-120)
+            { id: 91, q: "Có mấy 'đột phá chiến lược' được xác định trong nhiệm kỳ Đại hội XIV?", a: "B", opts: { A: "2 đột phá", B: "3 đột phá", C: "4 đột phá", D: "5 đột phá" } },
+            { id: 92, q: "Đột phá chiến lược đầu tiên tập trung vào nội dung gì?", a: "A", opts: { A: "Thể chế phát triển", B: "Tăng cường khai thác tài nguyên", C: "Xây dựng quân đội", D: "Phát triển nông nghiệp" } },
+            { id: 93, q: "Đột phá chiến lược thứ hai tập trung nâng cao chất lượng lĩnh vực nào?", a: "B", opts: { A: "Y tế công cộng", B: "Nguồn nhân lực, phát triển nguồn nhân lực chất lượng cao", C: "Xuất khẩu nông sản", D: "Khai thác khoáng sản" } },
+            { id: 94, q: "Đột phá chiến lược thứ ba tập trung xây dựng hoàn thiện cái gì?", a: "C", opts: { A: "Các nhà máy điện hạt nhân", B: "Các khu du lịch sinh thái", C: "Kết cấu hạ tầng kinh tế - xã hội", D: "Hạ tầng nông thôn mới" } },
+            { id: 95, q: "Về kinh tế, thành phần kinh tế nào được xác định giữ vai trò 'chủ đạo'?", a: "B", opts: { A: "Kinh tế hợp tác xã", B: "Kinh tế nhà nước", C: "Kinh tế có vốn đầu tư nước ngoài (FDI)", D: "Kinh tế tư nhân" } },
+            { id: 96, q: "Thành phần kinh tế tư nhân được xác định có vai trò như thế nào?", a: "D", opts: { A: "Là thành phần phụ trợ", B: "Chỉ phát triển ở nông thôn", C: "Bị hạn chế phát triển", D: "Là một động lực quan trọng nhất của nền kinh tế" } },
+            { id: 97, q: "Trong phát triển kết cấu hạ tầng, loại hình hạ tầng giao thông nào được chú trọng?", a: "A", opts: { A: "Hạ tầng giao thông đa phương thức", B: "Chỉ phát triển đường bộ", C: "Chỉ ưu tiên đường thủy", D: "Chỉ tập trung vào giao thông nông thôn" } },
+            { id: 98, q: "Các mô hình kinh tế mới nào được định hướng tập trung phát triển?", a: "B", opts: { A: "Kinh tế tập trung bao cấp", B: "Kinh tế số, kinh tế xanh, kinh tế tuần hoàn", C: "Kinh tế gia công xuất khẩu", D: "Kinh tế khai khoáng" } },
+            { id: 99, q: "Ngành công nghiệp, công nghệ chiến lược nào được xác định là trọng tâm ưu tiên phát triển?", a: "C", opts: { A: "Công nghiệp dệt may", B: "Công nghiệp thực phẩm", C: "Chip bán dẫn, trí tuệ nhân tạo", D: "Sản xuất vật liệu xây dựng" } },
+            { id: 100, q: "Động lực chính cho mô hình tăng trưởng kinh tế mới là gì?", a: "C", opts: { A: "Vốn và lao động giá rẻ", B: "Khai thác tài nguyên thiên nhiên", C: "Khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số", D: "Viện trợ nước ngoài" } },
+            { id: 101, q: "Có mấy 'Đột phá chiến lược' được xác định trong nhiệm kỳ Đại hội XIV?", a: "B", opts: { A: "2 đột phá", B: "3 đột phá", C: "4 đột phá", D: "5 đột phá" } },
+            { id: 102, q: "Đột phá chiến lược thứ nhất tập trung vào yếu tố nào?", a: "B", opts: { A: "Xây dựng quân cảng", B: "Thể chế phát triển (tháo gỡ nút thắt, khơi thông nguồn lực)", C: "Nhập khẩu công nghệ cũ", D: "Tăng thuế tiêu dùng" } },
+            { id: 103, q: "Đột phá chiến lược thứ hai tập trung vào nội dung gì?", a: "B", opts: { A: "Khai thác thêm dầu mỏ", B: "Chuyển đổi cơ cấu và nâng cao chất lượng nguồn nhân lực", C: "Mở thêm nhiều chợ dân sinh", D: "Giảm số lượng trường đại học" } },
+            { id: 104, q: "Đột phá chiến lược thứ ba nhấn mạnh xây dựng kết cấu hạ tầng nào?", a: "A", opts: { A: "Hạ tầng giao thông đa phương thức, hạ tầng số, hạ tầng xanh, năng lượng", B: "Chỉ hạ tầng đường bộ cao tốc", C: "Hạ tầng nhà ở tư nhân", D: "Hạ tầng sân golf quốc tế" } },
+            { id: 105, q: "Mục tiêu tăng trưởng GDP bình quân 5 năm 2026 - 2030 đạt mức nào?", a: "B", opts: { A: "6 - 7%/năm", B: "10%/năm trở lên", C: "4 - 5%/năm", D: "Không xác định mục tiêu" } },
+            { id: 106, q: "GDP bình quân đầu người phấn đấu đến năm 2030 đạt khoảng bao nhiêu?", a: "B", opts: { A: "5.000 USD", B: "8.500 USD", C: "12.000 USD", D: "20.000 USD" } },
+            { id: 107, q: "Tỉ trọng kinh tế số mục tiêu đạt bao nhiêu % GDP vào năm 2030?", a: "B", opts: { A: "10%", B: "30%", C: "50%", D: "70%" } },
+            { id: 108, q: "Tốc độ tăng năng suất lao động phấn đấu đạt khoảng bao nhiêu mỗi năm?", a: "B", opts: { A: "3%/năm", B: "8,5%/năm", C: "12%/năm", D: "1%/năm" } },
+            { id: 109, q: "Đóng góp của năng suất nhân tố tổng hợp (TFP) vào tăng trưởng kinh tế đạt mức nào?", a: "B", opts: { A: "Dưới 30%", B: "Trên 55%", C: "Khoảng 40%", D: "100%" } },
+            { id: 110, q: "Tỉ lệ đô thị hoá phấn đấu đạt mức bao nhiêu vào năm 2030?", a: "B", opts: { A: "Dưới 30%", B: "Trên 50%", C: "Khoảng 40%", D: "80%" } },
+            { id: 111, q: "Tổng vốn đầu tư toàn xã hội bình quân 5 năm phấn đấu đạt bao nhiêu % GDP?", a: "B", opts: { A: "20%", B: "40%", C: "60%", D: "10%" } },
+            { id: 112, q: "Bội chi ngân sách nhà nước mục tiêu khoảng bao nhiêu % GDP?", a: "B", opts: { A: "1%", B: "5%", C: "10%", D: "0% (không bội chi)" } },
+            { id: 113, q: "Tỉ lệ che phủ rừng mục tiêu duy trì ở mức bao nhiêu %?", a: "B", opts: { A: "30%", B: "42%", C: "50%", D: "60%" } },
+            { id: 114, q: "Lượng phát thải khí nhà kính phấn đấu giảm bao nhiêu %?", a: "B", opts: { A: "1 - 2%", B: "8 - 9%", C: "20 - 30%", D: "Không giảm" } },
+            { id: 115, q: "Tỉ lệ xử lý và tái sử dụng nước thải ra môi trường lưu vực các sông đạt bao nhiêu %?", a: "B", opts: { A: "30 - 40%", B: "65 - 70%", C: "90 - 100%", D: "10%" } },
+            { id: 116, q: "Diện tích các khu bảo tồn biển phấn đấu đạt tối thiểu bao nhiêu % diện tích biển quốc gia?", a: "B", opts: { A: "1%", B: "6%", C: "15%", D: "25%" } },
+            { id: 117, q: "Tỉ lệ các cơ sở sản xuất đạt quy chuẩn về môi trường mục tiêu đạt bao nhiêu %?", a: "B", opts: { A: "50 - 60%", B: "98 - 100%", C: "Khoảng 80%", D: "Chỉ cần 70%" } },
+            { id: 118, q: "Động lực chính cho tăng trưởng kinh tế giai đoạn 2026-2030 là gì?", a: "B", opts: { A: "Chỉ cần lao động giá rẻ", B: "Khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số", C: "Viện trợ từ các tổ chức tài chính", D: "Bán tài nguyên thô" } },
+            { id: 119, q: "Ngành công nghiệp nào được ưu tiên phát triển như là ngành chiến lược, mũi nhọn?", a: "B", opts: { A: "Sản xuất đồ gỗ thủ công", B: "Chip bán dẫn, trí tuệ nhân tạo (AI)", C: "Khai thác than đá truyền thống", D: "Dệt may thủ công" } },
+            { id: 120, q: "Việc lấy khoa học và công nghệ làm trọng tâm nhằm mục đích gì?", a: "B", opts: { A: "Để thay thế hoàn toàn con người", B: "Thúc đẩy, làm mới các động lực tăng trưởng truyền thống", C: "Để giảm chi phí nhập khẩu máy móc", D: "Để trở thành nước xuất khẩu vũ khí hàng đầu" } },
+
+            // BỘ 5 (121-150)
+            { id: 121, q: "Trong các nhiệm vụ, nhiệm vụ nào được xác định là 'Then chốt'?", a: "A", opts: { A: "Xây dựng Đảng", B: "Phát triển kinh tế", C: "Bảo vệ môi trường", D: "Phát triển công nghệ" } },
+            { id: 122, q: "Việc đổi mới tổ chức bộ máy của hệ thống chính trị hướng tới mô hình như thế nào?", a: "B", opts: { A: "Tăng thêm nhiều cấp trung gian", B: "Tinh, gọn, mạnh, hiệu năng, hiệu lực, hiệu quả", C: "Giữ nguyên mô hình hiện tại", D: "Tập trung quyền lực tuyệt đối vào một cơ quan" } },
+            { id: 123, q: "Ban Chấp hành Trung ương Đảng khoá XIV (vừa được bầu) có tổng số bao nhiêu Uỷ viên?", a: "B", opts: { A: "180 đồng chí", B: "200 đồng chí", C: "220 đồng chí", D: "250 đồng chí" } },
+            { id: 124, q: "Trong Ban Chấp hành Trung ương Đảng khoá XIV có bao nhiêu Uỷ viên dự khuyết?", a: "C", opts: { A: "10 đồng chí", B: "15 đồng chí", C: "20 đồng chí", D: "25 đồng chí" } },
+            { id: 125, q: "Đối với công tác phòng, chống tham nhũng, lãng phí, tiêu cực, thái độ chỉ đạo của Đảng là gì?", a: "C", opts: { A: "Làm theo từng đợt, từng phong trào", B: "Chỉ xử lý cán bộ cấp dưới", C: "Kiên quyết, kiên trì đẩy mạnh đấu tranh ngăn chặn, đẩy lùi", D: "Tập trung giáo dục là chính, không xử lý kỷ luật" } },
+            { id: 126, q: "Đối với cán bộ, Đảng ta có chủ trương khuyến khích và bảo vệ đối tượng cán bộ nào?", a: "C", opts: { A: "Cán bộ biết giữ an toàn cá nhân", B: "Cán bộ lớn tuổi, có thâm niên", C: "Cán bộ năng động, sáng tạo, dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung", D: "Cán bộ biết làm vừa lòng cấp trên" } },
+            { id: 127, q: "Đổi mới công tác cán bộ bảo đảm nguyên tắc gì để đánh giá thực chất?", a: "B", opts: { A: "Ai làm lâu năm người đó được thăng chức", B: "'Có vào, có ra', 'có lên, có xuống'", C: "Bổ nhiệm trọn đời", D: "Chỉ lấy phiếu tín nhiệm làm tiêu chí duy nhất" } },
+            { id: 128, q: "Hiến pháp năm 2013 được Đại hội XIV định hướng như thế nào trong thời gian tới?", a: "B", opts: { A: "Giữ nguyên không thay đổi", B: "Nghiên cứu tổng kết, sửa đổi tổng thể phù hợp với thực tiễn, yêu cầu phát triển đất nước", C: "Bãi bỏ hoàn toàn để soạn Hiến pháp mới", D: "Chỉ sửa đổi phần liên quan đến kinh tế" } },
+            { id: 129, q: "Năm 2030, nước ta sẽ kỷ niệm sự kiện lịch sử trọng đại nào?", a: "B", opts: { A: "100 năm ngày Quốc khánh", B: "100 năm ngày thành lập Đảng Cộng sản Việt Nam", C: "100 năm ngày thành lập Quân đội", D: "100 năm ngày sinh Chủ tịch Hồ Chí Minh" } },
+            { id: 130, q: "Về Điều lệ Đảng hiện hành, Đại hội XIV đã quyết định như thế nào?", a: "C", opts: { A: "Sửa đổi toàn diện Điều lệ Đảng", B: "Bổ sung thêm nhiều chương mới", C: "Đồng ý không bổ sung, sửa đổi Điều lệ Đảng hiện hành", D: "Giao cho các địa phương tự điều chỉnh" } },
+            { id: 131, q: "Đại hội XIV đã bầu Ban Chấp hành Trung ương Đảng khoá XIV gồm tổng cộng bao nhiêu đồng chí?", a: "B", opts: { A: "180 đồng chí", B: "200 đồng chí", C: "220 đồng chí", D: "250 đồng chí" } },
+            { id: 132, q: "Trong số 200 Uỷ viên Trung ương khoá XIV, có bao nhiêu Uỷ viên chính thức?", a: "B", opts: { A: "150 đồng chí", B: "180 đồng chí", C: "190 đồng chí", D: "200 đồng chí (tất cả đều chính thức)" } },
+            { id: 133, q: "Trong số 200 Uỷ viên Trung ương khoá XIV, có bao nhiêu Uỷ viên dự khuyết?", a: "B", opts: { A: "10 đồng chí", B: "20 đồng chí", C: "30 đồng chí", D: "50 đồng chí" } },
+            { id: 134, q: "Đại hội XIV đã quyết định như thế nào về việc sửa đổi Điều lệ Đảng hiện hành?", a: "B", opts: { A: "Sửa đổi toàn diện ngay tại Đại hội", B: "Đồng ý không bổ sung, sửa đổi Điều lệ Đảng hiện hành", C: "Bãi bỏ Điều lệ cũ để viết cái mới hoàn toàn", D: "Chỉ sửa đổi phần liên quan đến nhiệm kỳ" } },
+            { id: 135, q: "Đại hội XIV giao Ban Chấp hành Trung ương khóa XIV nghiên cứu sửa đổi Điều lệ Đảng gắn với văn kiện nào tại Đại hội XV?", a: "B", opts: { A: "Hiến pháp năm 2013", B: "Cương lĩnh xây dựng đất nước (bổ sung, sửa đổi)", C: "Luật Tổ chức Chính phủ", D: "Quy định về thi đua khen thưởng" } },
+            { id: 136, q: "Mục tiêu xây dựng hệ thống chính trị hướng tới mô hình chính quyền mấy cấp?", a: "B", opts: { A: "2 cấp", B: "3 cấp", C: "4 cấp", D: "5 cấp" } },
+            { id: 137, q: "Một nhiệm vụ trọng tâm là đổi mới phương thức lãnh đạo của Đảng theo hướng nào?", a: "B", opts: { A: "Can thiệp sâu vào mọi chi tiết quản lý của Nhà nước", B: "Nâng cao năng lực tự đổi mới, tự hoàn thiện, tăng cường hiệu lực, hiệu quả", C: "Giảm bớt vai trò lãnh đạo ở cơ sở", D: "Chỉ tập trung vào việc ban hành nghị quyết không kiểm tra" } },
+            { id: 138, q: "Phương châm nào trong công tác cán bộ được Nghị quyết XIV nhấn mạnh để đánh giá thực chất?", a: "B", opts: { A: "'Chỉ có lên, không có xuống'", B: "'Có vào, có ra', 'có lên, có xuống'", C: "'Bổ nhiệm theo thâm niên lâu năm'", D: "'Ưu tiên người nhà'" } },
+            { id: 139, q: "Đối tượng cán bộ nào được Đảng khuyến khích và bảo vệ (Đột phá 2)?", a: "B", opts: { A: "Cán bộ biết giữ an toàn cho bản thân", B: "Cán bộ năng động, sáng tạo, dám nghĩ, dám làm, dám chịu trách nhiệm vì lợi ích chung", C: "Cán bộ làm việc rập khuôn theo máy móc", D: "Cán bộ biết làm hài lòng mọi cấp trên" } },
+            { id: 140, q: "Năm 2030 là mốc kỷ niệm bao nhiêu năm Ngày thành lập Đảng Cộng sản Việt Nam?", a: "B", opts: { A: "80 năm", B: "100 năm", C: "120 năm", D: "150 năm" } },
+            { id: 141, q: "Nghị quyết XIV định hướng nghiên cứu tổng kết, sửa đổi văn bản pháp lý cao nhất nào?", a: "B", opts: { A: "Luật Đất đai", B: "Hiến pháp năm 2013", C: "Bộ luật Hình sự", D: "Luật Giao thông đường bộ" } },
+            { id: 142, q: "Đảng ta thật sự cần là gì theo nhiệm vụ xây dựng Đảng (Quan điểm 5)?", a: "A", opts: { A: "Là đạo đức, là văn minh", B: "Là lực lượng duy nhất làm kinh tế", C: "Là tổ chức hành chính đơn thuần", D: "Là cơ quan quản lý doanh nghiệp" } },
+            { id: 143, q: "Công tác kiểm tra, giám sát của Đảng cần tập trung vào hình thức nào (Mục 12)?", a: "B", opts: { A: "Chỉ kiểm tra khi có đơn tố cáo", B: "Tăng cường giám sát thường xuyên", C: "Chỉ kiểm tra ở cấp trung ương", D: "Bỏ qua giám sát cơ sở" } },
+            { id: 144, q: "Đấu tranh phòng, chống các tệ nạn nào được xác định là 'kiên quyết, kiên trì'?", a: "A", opts: { A: "Tham nhũng, lãng phí, quan liêu, tiêu cực", B: "Cờ bạc, rượu chè trong cơ quan", C: "Đi làm muộn, về sớm", D: "Ăn mặc không đúng quy định" } },
+            { id: 145, q: "Việc xây dựng Nhà nước pháp quyền XHCN Việt Nam là của ai, do ai, vì ai?", a: "B", opts: { A: "Của cán bộ, do cán bộ, vì cán bộ", B: "Của Nhân dân, do Nhân dân, vì Nhân dân", C: "Của doanh nghiệp, do doanh nghiệp, vì doanh nghiệp", D: "Của Đảng, do Đảng, vì Đảng" } },
+            { id: 146, q: "Tầm nhìn 100 năm Đảng lãnh đạo cách mạng Việt Nam là giai đoạn nào?", a: "B", opts: { A: "1920 - 2020", B: "1930 - 2030", C: "1945 - 2045", D: "1975 - 2075" } },
+            { id: 147, q: "Đối với đội ngũ cán bộ cấp chiến lược, Nghị quyết XIV yêu cầu điều gì hàng đầu?", a: "B", opts: { A: "Phải có bằng tiến sĩ", B: "Phải tiêu biểu về bản lĩnh chính trị, phẩm chất, năng lực, uy tín", C: "Phải nói giỏi ngoại ngữ", D: "Phải có tài sản lớn" } },
+            { id: 148, q: "Việc 'Kiểm soát quyền lực' cần thực hiện mạnh mẽ trong cơ quan nào?", a: "B", opts: { A: "Chỉ trong các ngân hàng", B: "Trong Đảng và Nhà nước", C: "Chỉ trong các trường học", D: "Trong các tổ chức phi chính phủ" } },
+            { id: 149, q: "Nghị quyết XIV kêu gọi toàn Đảng, toàn quân phát huy cao độ điều gì để thực hiện thắng lợi Nghị quyết?", a: "B", opts: { A: "Khả năng tranh luận", B: "Tinh thần yêu nước, khát vọng phát triển, sức mạnh đại đoàn kết toàn dân tộc", C: "Năng lực tiêu dùng", D: "Kỹ năng sử dụng mạng xã hội cá nhân" } },
+            { id: 150, q: "Ngày chính thức ký ban hành Nghị quyết Đại hội đại biểu toàn quốc lần thứ XIV là ngày nào?", a: "B", opts: { A: "01/01/2026", B: "23/01/2026", C: "03/02/2026", D: "19/05/2026" } },
+
+            // BỘ 6 (151-180)
+            { id: 151, q: "Chỉ số phát triển con người (HDI) phấn đấu đến năm 2030 đạt khoảng bao nhiêu?", a: "C", opts: { A: "0,7", B: "0,75", C: "0,8", D: "0,9" } },
+            { id: 152, q: "Tỉ lệ lao động nông nghiệp trong tổng lao động xã hội phấn đấu giảm xuống còn mức nào?", a: "C", opts: { A: "Dưới 10%", B: "Dưới 15%", C: "Dưới 20%", D: "Dưới 30%" } },
+            { id: 153, q: "Tỉ lệ lao động qua đào tạo có bằng cấp, chứng chỉ phấn đấu đạt mức nào?", a: "C", opts: { A: "20 - 25%", B: "25 - 30%", C: "35 - 40%", D: "50 - 60%" } },
+            { id: 154, q: "Lượng phát thải khí nhà kính phấn đấu giảm bao nhiêu %?", a: "C", opts: { A: "5 - 6%", B: "6 - 7%", C: "8 - 9%", D: "10 - 15%" } },
+            { id: 155, q: "Tỉ lệ xử lý và tái sử dụng nước thải ra môi trường lưu vực các sông đạt khoảng bao nhiêu?", a: "C", opts: { A: "40 - 50%", B: "50 - 60%", C: "65 - 70%", D: "80 - 90%" } },
+            { id: 156, q: "Diện tích các khu bảo tồn biển phấn đấu đạt tối thiểu bao nhiêu % diện tích biển quốc gia?", a: "C", opts: { A: "2%", B: "4%", C: "6%", D: "10%" } },
+            { id: 157, q: "Tỉ lệ các cơ sở sản xuất kinh doanh đạt quy chuẩn về môi trường đạt khoảng bao nhiêu?", a: "C", opts: { A: "80 - 85%", B: "90 - 95%", C: "98 - 100%", D: "Đạt 100%" } },
+            { id: 158, q: "Đóng góp của năng suất nhân tố tổng hợp (TFP) vào tăng trưởng kinh tế đạt mục tiêu bao nhiêu?", a: "C", opts: { A: "Dưới 40%", B: "Khoảng 50%", C: "Trên 55%", D: "100%" } },
+            { id: 159, q: "Tỉ trọng kinh tế số phấn đấu đạt khoảng bao nhiêu % GDP?", a: "C", opts: { A: "15%", B: "20%", C: "30%", D: "50%" } },
+            { id: 160, q: "Theo Nghị quyết XIV, hệ thống chính trị sẽ được vận hành theo mô hình chính quyền mấy cấp?", a: "B", opts: { A: "2 cấp", B: "3 cấp", C: "4 cấp", D: "5 cấp" } },
+            { id: 161, q: "Nhiệm kỳ Đại hội XIII diễn ra trong bối cảnh thế giới xuất hiện vấn đề nào rất mới, chưa có tiền lệ?", a: "B", opts: { A: "Chiến tranh lạnh", B: "Đại dịch Covid-19", C: "Khủng hoảng tài chính toàn cầu 1997", D: "Phong trào phi thực dân hóa" } },
+            { id: 162, q: "Trong nhiệm kỳ XIII, Đảng ta đã thực hiện quyết liệt giải pháp nào để khống chế đại dịch?", a: "B", opts: { A: "Cách ly toàn bộ biên giới vĩnh viễn", B: "'Ngoại giao vắcxin', tiêm chủng miễn phí toàn quốc", C: "Thu phí tiêm chủng để tái đầu tư", D: "Chỉ tập trung chữa trị không phòng ngừa" } },
+            { id: 163, q: "Nghị quyết XIV đánh giá công tác xây dựng, chỉnh đốn Đảng trong nhiệm kỳ XIII có đặc điểm gì nổi bật?", a: "B", opts: { A: "Duy trì như cũ", B: "Có mặt nổi bật, đột phá chưa từng có", C: "Chỉ tập trung vào công tác dân vận", D: "Giảm bớt số lượng đảng viên" } },
+            { id: 164, q: "Cuộc cách mạng nào về tổ chức bộ máy được dư luận quốc tế đánh giá cao trong nhiệm kỳ XIII?", a: "B", opts: { A: "Cách mạng chuyển đổi xanh", B: "Cách mạng về sắp xếp tổ chức bộ máy theo hướng tinh, gọn, mạnh", C: "Cách mạng về quản lý giá cả", D: "Cách mạng trong nông nghiệp" } },
+            { id: 165, q: "Nghị quyết XIV đánh giá Việt Nam là 'điểm sáng' về điều gì trong nhiệm kỳ qua?", a: "B", opts: { A: "Sản xuất vàng", B: "Ổn định chính trị, an ninh, an toàn và ổn định xã hội", C: "Khai thác khoáng sản biển", D: "Tăng trưởng dân số" } },
+            { id: 166, q: "Đâu là một hạn chế trong việc phát triển kinh tế được Nghị quyết nêu rõ?", a: "B", opts: { A: "Tăng trưởng quá nhanh gây lạm phát phi mã", B: "Hoàn thiện thể chế kinh tế thị trường còn chậm", C: "Không thu hút được vốn FDI", D: "Hệ thống ngân hàng bị đóng băng hoàn toàn" } },
+            { id: 167, q: "Tình trạng nào về môi trường được đánh giá là 'chưa được kiểm soát hiệu quả, có mặt còn trầm trọng hơn'?", a: "B", opts: { A: "Sa mạc hóa", B: "Ngập lụt, ô nhiễm môi trường (đô thị, khu công nghiệp)", C: "Băng tan ở hai cực", D: "Mưa axit diện rộng" } },
+            { id: 168, q: "Nghị quyết đánh giá yếu tố nào 'chưa thực sự trở thành nguồn lực, sức mạnh nội sinh'?", a: "B", opts: { A: "Tài nguyên rừng", B: "Văn hoá", C: "Sức lao động thủ công", D: "Nguồn điện năng" } },
+            { id: 169, q: "Một trong những bài học kinh nghiệm sau 40 năm đổi mới là yếu tố nào giữ vai trò chủ thể, trung tâm?", a: "B", opts: { A: "Các chuyên gia nước ngoài", B: "Nhân dân", C: "Các tập đoàn đa quốc gia", D: "Hệ thống máy móc tự động" } },
+            { id: 170, q: "Thành tựu của 40 năm đổi mới khẳng định đường lối đổi mới của Đảng là gì?", a: "A", opts: { A: "Đúng đắn, sáng tạo, phù hợp với thực tiễn Việt Nam", B: "Phỏng theo hoàn toàn mô hình nước ngoài", C: "Chỉ mang tính chất tạm thời", D: "Không còn phù hợp trong giai đoạn hiện nay" } },
+            { id: 171, q: "Sau 40 năm đổi mới, Đảng ta đã đúc kết được điều gì mang tầm lý luận?", a: "B", opts: { A: "Qy trình sản xuất mới", B: "Những bài học kinh nghiệm quý báu", C: "Cách thức vận hành thị trường chứng khoán", D: "Phương pháp khai thác dầu khí hiệu quả" } },
+            { id: 172, q: "Nghị quyết XIV nhấn mạnh việc tự chủ yếu tố nào để bảo vệ vững chắc Tổ quốc?", a: "B", opts: { A: "Tự chủ về năng lượng hóa thạch", B: "Tự chủ chiến lược", C: "Tự chủ về lương thực xuất khẩu", D: "Tự chủ về tài chính cá nhân" } },
+            { id: 173, q: "Sự lãnh đạo của ai là nhân tố hàng đầu quyết định mọi thắng lợi của cách mạng Việt Nam?", a: "B", opts: { A: "Sự lãnh đạo của Liên hợp quốc", B: "Sự lãnh đạo của Đảng Cộng sản Việt Nam", C: "Sự chỉ đạo của các tổ chức kinh tế thế giới", D: "Sự điều hành của các công ty công nghệ" } },
+            { id: 174, q: "Trong nhiệm kỳ XIII, các dự án tồn đọng và doanh nghiệp thua lỗ kéo dài đã được xử lý như thế nào?", a: "B", opts: { A: "Để mặc cho tự phá sản", B: "Được xử lý dứt điểm, đạt nhiều kết quả tích cực", C: "Được cấp thêm ngân sách không giới hạn", D: "Chuyển hoàn toàn sang sở hữu nước ngoài" } },
+            { id: 175, q: "Công tác xây dựng pháp luật trong nhiệm kỳ XIII đã đạt được điều gì quan trọng?", a: "B", opts: { A: "Tăng thêm các thủ tục hành chính", B: "Tháo gỡ các điểm nghẽn về thể chế", C: "Giữ nguyên các quy định từ năm 1986", D: "Chỉ tập trung vào luật hình sự" } },
+            { id: 176, q: "Tỉ lệ nợ công trong nhiệm kỳ XIII được đánh giá như thế nào?", a: "B", opts: { A: "Vượt ngưỡng an toàn cho phép", B: "Được kiểm soát tốt", C: "Không thể thống kê được", D: "Tăng cao kỷ lục" } },
+            { id: 177, q: "Uy tín của Đảng sau nhiệm kỳ XIII được đánh giá như thế nào?", a: "B", opts: { A: "Bị giảm sút trong mắt nhân dân", B: "Tiếp tục được nâng cao, củng cố niềm tin của Nhân dân", C: "Không có sự thay đổi", D: "Chỉ được đánh giá cao ở nước ngoài" } },
+            { id: 178, q: "Việc kết hợp phát triển kinh tế - xã hội với quốc phòng, an ninh ở một số địa bàn được đánh giá ra sao?", a: "B", opts: { A: "Đã hoàn hảo, không cần chỉnh sửa", B: "Chưa được quan tâm đúng mức", C: "Đã quá chú trọng làm ảnh hưởng kinh tế", D: "Chỉ được thực hiện ở các đặc khu" } },
+            { id: 179, q: "Sau 40 năm đổi mới, vị thế đất nước trên con đường nào được nâng tầm?", a: "B", opts: { A: "Con đường tư bản hóa nhanh chóng", B: "Con đường xây dựng chủ nghĩa xã hội", C: "Con đường trung lập về chính trị", D: "Con đường hướng tâm về nông nghiệp" } },
+            { id: 180, q: "Mục tiêu 'kép' được thực hiện trong giai đoạn Covid-19 là gì?", a: "B", opts: { A: "Vừa xuất khẩu gạo vừa nhập khẩu lúa mì", B: "Vừa phòng, chống dịch bệnh, vừa phục hồi, phát triển kinh tế", C: "Vừa xây đường bộ vừa xây đường thủy", D: "Vừa học online vừa học offline" } }
+        ];
+
+        let selectedSet = [];
+        let currentIndex = 0;
+        let canProceed = false;
+        let score = 0; // Thêm biến để lưu số câu trả lời đúng
+
+        function startQuiz(min, max, setName) {
+            let pool = quizBank.filter(q => q.id >= min && q.id <= max);
+            selectedSet = pool.sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentIndex = 0;
+            score = 0; // Đặt lại điểm về 0 khi bắt đầu bộ mới
+            
+            document.getElementById('set-name-display').innerText = setName;
+            document.getElementById('overlay-quiz').style.display = 'flex';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            canProceed = false;
+            let currentQ = selectedSet[currentIndex];
+            document.getElementById('progress-display').innerText = `Câu ${currentIndex + 1}/10`;
+            document.getElementById('question-text').innerHTML = `${currentIndex + 1}. ${currentQ.q}`;
+            document.getElementById('feedback').innerText = "";
+            
+            let optionsHTML = "";
+            for (let key in currentQ.opts) {
+                // Thêm id="opt-A", id="opt-B"... để có thể tự động đổi màu đáp án đúng
+                optionsHTML += `<button id="opt-${key}" class="option-btn" onclick="checkAnswer(this, '${key}')">${key}. ${currentQ.opts[key]}</button>`;
+            }
+            document.getElementById('options-list').innerHTML = optionsHTML;
+            document.getElementById('options-list').style.display = 'block'; // Hiện lại các nút nếu trước đó bị ẩn
+        }
+
+        function checkAnswer(btn, choice) {
+            if (canProceed) return; 
+            canProceed = true; // Khóa lại, không cho bấm nhiều đáp án cùng lúc
+            
+            let correctAns = selectedSet[currentIndex].a;
+            
+            if (choice === correctAns) {
+                score++; // Cộng 1 điểm
+                btn.classList.add('correct');
+                document.getElementById('feedback').innerHTML = "<span style='color:var(--success-color)'>CHÍNH XÁC!</span>";
+            } else {
+                btn.classList.add('wrong'); // Nút vừa chọn bị sai (chuyển đỏ)
+                document.getElementById(`opt-${correctAns}`).classList.add('correct'); // Tự động làm sáng nút đúng (chuyển xanh)
+                document.getElementById('feedback').innerHTML = `<span style='color:var(--danger-color)'>SAI RỒI! Đáp án đúng là ${correctAns}</span>`;
+            }
+
+            // Đợi 2 giây để chiến sĩ kịp nhìn đáp án rồi mới chuyển câu
+            setTimeout(() => {
+                if (currentIndex < 9) { 
+                    currentIndex++;
+                    loadQuestion();
+                } else {
+                    showResult(); // Hết 5 câu thì gọi hàm hiện điểm
+                }
+            }, 2000);
+        }
+
+        function showResult() {
+            document.getElementById('progress-display').innerText = "ĐÃ HOÀN THÀNH";
+            
+            // Xóa câu hỏi và thay bằng màn hình tổng kết điểm
+            document.getElementById('question-text').innerHTML = `
+                <div style="text-align: center; padding: 10px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 5px;">!!! XIN CHÚC MỪNG !!!</h3>
+                    <p style="font-size: 18px;">Đồng chí đã trả lời đúng:</p>
+                    <div style="font-size: 60px; font-weight: bold; color: var(--success-color); margin: 10px 0;">
+                        ${score} <span style="font-size: 30px; color: #2c3e50;">/ 10</span>
+                    </div>
+                    <p style="font-size: 18px;">câu hỏi!</p>
+                </div>
+            `;
+            
+            // Ẩn các nút A B C D và dòng phản hồi
+            document.getElementById('options-list').style.display = 'none';
+            document.getElementById('feedback').innerHTML = "";
+        }
+
+        function closeQuiz() {
+            document.getElementById('overlay-quiz').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
